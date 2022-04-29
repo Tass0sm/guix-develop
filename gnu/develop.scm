@@ -1,0 +1,17 @@
+(define-module (gnu develop)
+  ;; #:use-module (gnu home services)
+  ;; #:use-module (gnu home services symlink-manager)
+  ;; #:use-module (gnu home services shells)
+  ;; #:use-module (gnu home services xdg)
+  ;; #:use-module (gnu home services fontutils)
+  ;; #:use-module (gnu services)
+  ;; #:use-module (guix records)
+  ;; #:use-module (guix diagnostics)
+  ;; #:use-module (guix gexp)
+  ;; #:use-module (guix store)
+
+  #:export (hello-func))
+
+(define (hello-func)
+  (display "Hello, world!")
+  (newline))
