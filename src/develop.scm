@@ -1,4 +1,4 @@
-(define-module (gnu develop)
+(define-module (src develop)
   ;; #:use-module (gnu home services)
   ;; #:use-module (gnu home services symlink-manager)
   ;; #:use-module (gnu home services shells)
