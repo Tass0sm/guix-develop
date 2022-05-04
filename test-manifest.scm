@@ -1,8 +1,8 @@
-#!/usr/bin/env -S guile -L "/home/tassos/software/guix/" -L . -s
-!#
-
 (use-modules (src develop)
+             (gnu packages haskell-xyz)
+             (gnu packages haskell-apps)
              (guix gexp)
+             (guix profiles)
              (guix packages)
              (guix git-download)
              (guix build-system haskell)
@@ -20,10 +20,13 @@
                 #:recursive? #t
                 #:select? (git-predicate %source-dir)))
    (build-system haskell-build-system)
-   (inputs '())
+   (inputs (list ghc-pandoc
+                 ghc-pandoc-types))
    (home-page "")
    (synopsis "")
    (description "")
    (license license:gpl3+)))
 
-(hello-func)
+(manifest-add
+ (package->development-manifest ghc-graphdoc)
+ (list (package->manifest-entry cabal-install)))
