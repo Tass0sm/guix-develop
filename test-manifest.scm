@@ -1,7 +1,9 @@
 (use-modules (src develop)
+             (src utils)
              (gnu packages haskell-xyz)
              (gnu packages haskell-apps)
              (guix gexp)
+             (guix modules)
              (guix profiles)
              (guix packages)
              (guix git-download)
@@ -27,6 +29,24 @@
    (description "")
    (license license:gpl3+)))
 
+(define wrapped-cabal-install
+  (package
+    (inherit cabal-install)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-before 'configure 'update-constraints
+           (lambda _
+             (substitute* "cabal-install.cabal"
+               (("(base|base16-bytestring|random)\\s+[^,]+" all dep)
+                dep))))
+
+         ;; Not working
+         (add-after 'install 'wrap-cabal
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (generic-wrap-program (search-input-file outputs "bin/cabal")
+                                   "~a"))))))))
+
 (manifest-add
  (package->development-manifest ghc-graphdoc)
- (list (package->manifest-entry cabal-install)))
+ (list (package->manifest-entry wrapped-cabal-install)))
