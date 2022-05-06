@@ -33,19 +33,24 @@
   (package
     (inherit cabal-install)
     (arguments
-     `(#:phases
+     `(#:imported-modules
+       ;; Figure out how to put (src utils) in the load path on the build side.
+       ((src utils) ,@%haskell-build-system-modules)
+       #:phases
        (modify-phases %standard-phases
          (add-before 'configure 'update-constraints
            (lambda _
+             (display %load-path)
+             (newline)
              (substitute* "cabal-install.cabal"
                (("(base|base16-bytestring|random)\\s+[^,]+" all dep)
                 dep))))
-
-         ;; Not working
          (add-after 'install 'wrap-cabal
            (lambda* (#:key inputs outputs #:allow-other-keys)
+             (use-modules (src utils))
              (generic-wrap-program (search-input-file outputs "bin/cabal")
-                                   "~a"))))))))
+                                   (unlines (string-append "#!" (which "bash"))
+                                            "exec -a $0 ~a \"$@\"")))))))))
 
 (manifest-add
  (package->development-manifest ghc-graphdoc)

@@ -4,12 +4,12 @@
   #:export (unlines
             generic-wrap-program))
 
-(define* (unlines lines)
+(define* (unlines #:rest lines)
   (reduce-right string-append ""
                 (map (lambda (l) (string-append l "\n"))
                      lines)))
 
-(define* (generic-wrap-program prog script-body)
+(define* (generic-wrap-program prog script-content)
   "Make a wrapper script for PROG. SCRIPT-CONTENT is the wrapper script content.
 
 For example, this command:
@@ -44,8 +44,7 @@ Work in progress."
 
   (if already-wrapped?
 
-      ;; PROG is already a wrapper: add the new "export VAR=VALUE" lines just
-      ;; before the last line.
+      ;; PROG is already a wrapper. I'm not sure what to do, so I quit.
       (error (string-append prog " has already been wrapped. Refusing to wrap."))
 
       ;; PROG is not wrapped yet: create a shell script that sets VARS.
