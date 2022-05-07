@@ -34,7 +34,6 @@
     (inherit cabal-install)
     (arguments
      `(#:imported-modules
-       ;; Figure out how to put (src utils) in the load path on the build side.
        ((src utils) ,@%haskell-build-system-modules)
        #:phases
        (modify-phases %standard-phases
