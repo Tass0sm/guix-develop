@@ -8,55 +8,54 @@
              (guix profiles)
              (guix packages)
              (guix git-download)
+             (guix build-system copy)
+             (guix build-system trivial)
              (guix build-system haskell)
              ((guix licenses) #:prefix license:))
 
- (define %source-dir
+(define %source-dir
   "/home/tassos/software/haskell/graphdoc/")
 
 (define ghc-graphdoc
   (package
-   (name "ghc-graphdoc")
-   (version "0.0.1")
-   (source
-    (local-file %source-dir
-                #:recursive? #t
-                #:select? (git-predicate %source-dir)))
-   (build-system haskell-build-system)
-   (native-inputs (list zlib))
-   (inputs (list ghc-pandoc
-                 ghc-pandoc-types))
-   (home-page "")
-   (synopsis "")
-   (description "")
-   (license license:gpl3+)))
+    (name "ghc-graphdoc")
+    (version "0.0.1")
+    (source
+     (local-file %source-dir
+                 #:recursive? #t
+                 #:select? (git-predicate %source-dir)))
+    (build-system haskell-build-system)
+    (native-inputs (list zlib))
+    (inputs (list ghc-pandoc
+                  ghc-pandoc-types))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license license:gpl3+)))
 
-;; (define wrapped-cabal-install
-;;   (package
-;;     (inherit cabal-install)
-;;     (arguments
-;;      `(#:imported-modules
-;;        ((src utils) ,@%haskell-build-system-modules)
-;;        #:phases
-;;        (modify-phases %standard-phases
-;;          (add-before 'configure 'update-constraints
-;;            (lambda _
-;;              (display %load-path)
-;;              (newline)
-;;              (substitute* "cabal-install.cabal"
-;;                (("(base|base16-bytestring|random)\\s+[^,]+" all dep)
-;;                 dep))))
-;;          (add-after 'install 'wrap-cabal
-;;            (lambda* (#:key inputs outputs #:allow-other-keys)
-;;              (use-modules (src utils))
-;;              (generic-wrap-program (search-input-file outputs "bin/cabal")
-;;                                    (unlines (string-append "#!" (which "bash"))
-;;                                             "exec -a $0 ~a \"$@\"")))))))))
-
-;; (development-environment
-;;  (for ghc-graphdoc)
-;;  (addons '(haskell-lsp)))
+(define cabal-wrapper
+  (package
+    (name "cabal-wrapper")
+    (version "0.0.1")
+    (source (local-file "./cabal-wrapper.scm"))
+    (build-system copy-build-system)
+    (arguments
+     `(#:install-plan
+       '(("cabal-wrapper.scm" "bin/cabal-wrapper"))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'chmod
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (result (string-append out "/bin/cabal-wrapper")))
+               (chmod result #o555)))))))
+    (propagated-inputs
+     (list cabal-install))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license license:gpl3+)))
 
 (manifest-add
  (package->development-manifest ghc-graphdoc)
- (list (package->manifest-entry cabal-install)))
+ (list (package->manifest-entry cabal-wrapper)))
