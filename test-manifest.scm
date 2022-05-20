@@ -1,17 +1,13 @@
 (use-modules (src develop)
              (src utils)
-             (gnu packages compression)
-             (gnu packages haskell-xyz)
-             (gnu packages haskell-apps)
              (guix gexp)
              (guix modules)
              (guix profiles)
              (guix packages)
              (guix git-download)
-             (guix build-system copy)
-             (guix build-system trivial)
              (guix build-system haskell)
-             ((guix licenses) #:prefix license:))
+             ((guix licenses) #:prefix license:)
+             (gnu packages haskell-xyz))
 
 (define %source-dir
   "/home/tassos/software/haskell/graphdoc/")
@@ -25,7 +21,6 @@
                  #:recursive? #t
                  #:select? (git-predicate %source-dir)))
     (build-system haskell-build-system)
-    (native-inputs (list zlib))
     (inputs (list ghc-pandoc
                   ghc-pandoc-types))
     (home-page "")

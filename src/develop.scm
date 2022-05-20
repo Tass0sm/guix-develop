@@ -30,9 +30,8 @@
     (development-environment-package de))))
 
 (define (make-dev-manifest de)
-  (let ((pkg (development-environment-package de)))
-    (make-haskell-manifest pkg)))
-
-;; (let ((type (development-environmnet-type de)))
-;;     (case type
-;;       (("haskell") (make-haskell-manifest de))))
+  (let ((type (development-environmnet-type de))
+        (pkg (development-environment-package de)))
+    (case type
+      (("haskell") (make-haskell-manifest pkg))
+      (else (make-haskell-manifest pkg)))))

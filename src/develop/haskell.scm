@@ -47,4 +47,5 @@
 (define (make-haskell-manifest pkg)
   (manifest-add
    (package->development-manifest pkg)
-   (list (package->manifest-entry cabal-wrapper))))
+   (map package->manifest-entry (list cabal-wrapper
+                                  zlib))))
