@@ -33,29 +33,6 @@
     (description "")
     (license license:gpl3+)))
 
-(define cabal-wrapper
-  (package
-    (name "cabal-wrapper")
-    (version "0.0.1")
-    (source (local-file "./cabal-wrapper.scm"))
-    (build-system copy-build-system)
-    (arguments
-     `(#:install-plan
-       '(("cabal-wrapper.scm" "bin/cabal-wrapper"))
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'install 'chmod
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let* ((out (assoc-ref outputs "out"))
-                    (result (string-append out "/bin/cabal-wrapper")))
-               (chmod result #o555)))))))
-    (propagated-inputs
-     (list cabal-install))
-    (home-page "")
-    (synopsis "")
-    (description "")
-    (license license:gpl3+)))
-
-(manifest-add
- (package->development-manifest ghc-graphdoc)
- (list (package->manifest-entry cabal-wrapper)))
+(make-dev-manifest
+ (development-environment
+  (package ghc-graphdoc)))

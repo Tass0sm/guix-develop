@@ -1,32 +1,38 @@
 (define-module (src develop)
-  ;; #:use-module (gnu home services)
-  ;; #:use-module (gnu home services symlink-manager)
-  ;; #:use-module (gnu home services shells)
-  ;; #:use-module (gnu home services xdg)
-  ;; #:use-module (gnu home services fontutils)
-  ;; #:use-module (gnu services)
+  #:use-module (guix packages)
+  #:use-module (guix build-system)
   #:use-module (guix records)
-  ;; #:use-module (guix diagnostics)
-  ;; #:use-module (guix gexp)
-  ;; #:use-module (guix store)
+
+  #:use-module (src develop haskell)
 
   #:export (development-environment
             development-environment?
             this-development-environment
 
-            development-environment-packages
+            development-environment-package
+            development-environment-addons
 
-            hello-func))
+            make-dev-manifest))
 
 (define-record-type* <development-environment> development-environment
   make-development-environment
   development-environment?
   this-development-environment
 
-  ;; list of (PACKAGE OUTPUT...)
-  (packages           development-environment-packages
-                      (default '())))
+  (package       development-environment-package
+                 (default #f))
+  (addons        development-environment-addons
+                 (default '())))
 
-(define (hello-func)
-  (display "Hello, world!")
-  (newline))
+(define (development-environmnet-type de)
+  (build-system-name
+   (package-build-system
+    (development-environment-package de))))
+
+(define (make-dev-manifest de)
+  (let ((pkg (development-environment-package de)))
+    (make-haskell-manifest pkg)))
+
+;; (let ((type (development-environmnet-type de)))
+;;     (case type
+;;       (("haskell") (make-haskell-manifest de))))
