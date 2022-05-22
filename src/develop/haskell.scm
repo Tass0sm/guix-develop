@@ -1,11 +1,4 @@
 (define-module (src develop haskell)
-  ;; #:use-module (gnu home services symlink-manager)
-  ;; #:use-module (gnu home services shells)
-  ;; #:use-module (gnu home services xdg)
-  ;; #:use-module (gnu home services fontutils)
-  ;; #:use-module (gnu services)
-  ;; #:use-module (guix diagnostics)
-  ;; #:use-module (guix gexp)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages haskell-xyz)
   #:use-module (gnu packages haskell-apps)
@@ -21,24 +14,30 @@
 
   #:export (make-haskell-manifest))
 
-(define cabal-wrapper
+(define cabal-wrapper-script
+  (program-file "cabal-wrapper.scm"
+                #~(let ((ghc-path (getenv "GHC_PACKAGE_PATH"))
+                        (raw-args (cdr (command-line))))
+                    (unsetenv "GHC_PACKAGE_PATH")
+                    (apply execl `(#$(file-append cabal-install "/bin/cabal") "cabal" ,@raw-args))
+                    (setenv "GHC_PACKAGE_PATH" ghc-path))))
+
+(define cabal-install-wrapper
   (package
-    (name "cabal-wrapper")
+    (name "cabal-install-wrapper")
     (version "0.0.1")
-    (source (local-file "./cabal-wrapper.scm"))
+    (source cabal-wrapper-script)
     (build-system copy-build-system)
     (arguments
      `(#:install-plan
-       '(("cabal-wrapper.scm" "bin/cabal-wrapper"))
+       '(("cabal-wrapper.scm" "bin/cabal"))
        #:phases
        (modify-phases %standard-phases
          (add-after 'install 'chmod
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
-                    (result (string-append out "/bin/cabal-wrapper")))
+                    (result (string-append out "/bin/cabal")))
                (chmod result #o555)))))))
-    (propagated-inputs
-     (list cabal-install))
     (home-page "")
     (synopsis "")
     (description "")
@@ -47,5 +46,5 @@
 (define (make-haskell-manifest pkg)
   (manifest-add
    (package->development-manifest pkg)
-   (map package->manifest-entry (list cabal-wrapper
-                                  zlib))))
+   (map package->manifest-entry (list cabal-install-wrapper
+                                      zlib))))
