@@ -1,4 +1,4 @@
-(define-module (src develop haskell)
+(define-module (tassos-guix develop haskell)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages haskell-xyz)
   #:use-module (gnu packages haskell-apps)

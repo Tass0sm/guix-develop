@@ -1,5 +1,4 @@
-(use-modules (src develop)
-             (src utils)
+(use-modules (tassos-guix develop)
              (guix gexp)
              (guix modules)
              (guix profiles)
@@ -28,6 +27,6 @@
     (description "")
     (license license:gpl3+)))
 
-(make-dev-manifest
+(de->manifest
  (development-environment
   (package ghc-graphdoc)))

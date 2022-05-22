@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-guix shell -L . -m test-manifest.scm
+guix shell -L . -m manifest.scm

@@ -1,9 +1,9 @@
-(define-module (src develop)
+(define-module (tassos-guix develop)
   #:use-module (guix packages)
   #:use-module (guix build-system)
   #:use-module (guix records)
 
-  #:use-module (src develop haskell)
+  #:use-module (tassos-guix develop haskell)
 
   #:export (development-environment
             development-environment?
@@ -12,7 +12,7 @@
             development-environment-package
             development-environment-addons
 
-            make-dev-manifest))
+            de->manifest))
 
 (define-record-type* <development-environment> development-environment
   make-development-environment
@@ -29,7 +29,7 @@
    (package-build-system
     (development-environment-package de))))
 
-(define (make-dev-manifest de)
+(define (de->manifest de)
   (let ((type (development-environmnet-type de))
         (pkg (development-environment-package de)))
     (case type
