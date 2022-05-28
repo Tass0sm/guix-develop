@@ -24,15 +24,14 @@
   (addons        development-environment-addons
                  (default '())))
 
-(define (development-environmnet-type de)
-  (string->symbol
-   (build-system-name
-    (package-build-system
-     (development-environment-package de)))))
+(define (development-environment-type de)
+  (build-system-name
+   (package-build-system
+    (development-environment-package de))))
 
 (define (de->manifest de)
-  (let ((type (development-environmnet-type de))
+  (let ((type (development-environment-type de))
         (pkg (development-environment-package de)))
     (case type
-      (('haskell) (make-haskell-manifest pkg))
+      ((haskell) (make-haskell-manifest pkg))
       (else (make-haskell-manifest pkg)))))
