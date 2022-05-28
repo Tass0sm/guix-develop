@@ -25,13 +25,14 @@
                  (default '())))
 
 (define (development-environmnet-type de)
-  (build-system-name
-   (package-build-system
-    (development-environment-package de))))
+  (string->symbol
+   (build-system-name
+    (package-build-system
+     (development-environment-package de)))))
 
 (define (de->manifest de)
   (let ((type (development-environmnet-type de))
         (pkg (development-environment-package de)))
     (case type
-      (("haskell") (make-haskell-manifest pkg))
+      (('haskell) (make-haskell-manifest pkg))
       (else (make-haskell-manifest pkg)))))
