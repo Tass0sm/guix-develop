@@ -1,0 +1,10 @@
+(define-module (src build wrapper-build-system)
+  #:export (%standard-phases
+            wrapper-build))
+
+;; Commentary:
+;;
+;; System for building packages that don't require much compilation, mostly
+;; only to copy files around.
+;;
+;; Code:

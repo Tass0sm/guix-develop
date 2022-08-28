@@ -4,6 +4,7 @@
   #:use-module (guix records)
 
   #:use-module (tassos-guix develop haskell)
+  #:use-module (tassos-guix develop clojure)
 
   #:export (development-environment
             development-environment?
@@ -34,4 +35,5 @@
         (pkg (development-environment-package de)))
     (case type
       ((haskell) (make-haskell-manifest pkg))
+      ((clojure) (make-clojure-manifest pkg))
       (else (make-haskell-manifest pkg)))))
