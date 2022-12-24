@@ -1,6 +1,7 @@
 (define-module (tassos-guix develop)
   #:use-module (guix packages)
   #:use-module (guix build-system)
+  #:use-module (guix profiles)
   #:use-module (guix records)
 
   #:use-module (tassos-guix develop haskell)
@@ -36,4 +37,4 @@
     (case type
       ((haskell) (make-haskell-manifest pkg))
       ((clojure) (make-clojure-manifest pkg))
-      (else (make-haskell-manifest pkg)))))
+      (else (package->development-manifest pkg)))))
