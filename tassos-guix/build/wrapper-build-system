@@ -1,4 +1,4 @@
-(define-module (src build wrapper-build-system)
+(define-module (tassos-guix build wrapper-build-system)
   #:export (%standard-phases
             wrapper-build))
 
