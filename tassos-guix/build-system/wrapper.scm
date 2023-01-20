@@ -1,4 +1,4 @@
-(define-module (src build-system wrapper)
+(define-module (tassos-guix build-system wrapper)
   #:use-module (guix store)
   #:use-module (guix utils)
   #:use-module (guix gexp)
