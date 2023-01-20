@@ -4,7 +4,16 @@
 Useful development environments for software projects.
 
 * How to Start
-Add this repository to your =~/.config/guix/channels.scm=. Run =guix pull=. Then you can use the code from this repository by importing the correct modules.
+
+1. Instruct =guix pull= to pull code from this channel in addition to the default Guix channel(s) by adding following snippet to your =~/.config/guix/channels.scm=:
+   #+begin_src scheme
+   (channel
+     (name 'tassos-guix)
+     (url
+      "https://github.com/Tass0sm/guix-develop"))
+   #+end_src
+
+2. Run =guix pull=. Then you can use the code from this repository by importing the correct modules.
 
 * How to Use
 Create a project directory with the following contents.
